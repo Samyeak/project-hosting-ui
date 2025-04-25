@@ -30,5 +30,8 @@
     "postcss": "^8.4.21",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "lightningcss": "^1.29.3"
   }
 }
