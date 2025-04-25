@@ -22,7 +22,7 @@ const DeploymentForm: React.FC<DeploymentFormProps> = ({
   onSubmit,
   loading = false
 }) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<Deployment>();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -50,10 +50,10 @@ const DeploymentForm: React.FC<DeploymentFormProps> = ({
     }
   };
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: Deployment) => {
     const submissionData = {
       ...values,
-      deploymentDate: values.deploymentDate ? values.deploymentDate.format('YYYY-MM-DD') : null
+      // deploymentDate: values.deploymentDate ? values.deploymentDate.format('YYYY-MM-DD') : null
     };
 
     try {

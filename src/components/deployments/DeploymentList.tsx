@@ -136,7 +136,7 @@ const DeploymentList: React.FC = () => {
     {
       title: 'Actions',
       key: 'actions',
-      render: (_: any, record: Deployment) => (
+      render: (_: number, record: Deployment) => (
         <Space size="small">
           <Button 
             icon={<EditOutlined />} 

@@ -4,10 +4,11 @@
 import React from 'react';
 import {  Button, Form, Select, Space } from 'antd';
 import { SearchOutlined, ClearOutlined } from '@ant-design/icons';
+import { DeploymentFilter } from '@/lib/types';
 
 
 interface SearchBarProps {
-  onSearch: (values: any) => void;
+  onSearch: (values: DeploymentFilter) => void;
   projectOptions?: { value: string; label: string }[];
   clientOptions?: { value: string; label: string }[];
   environmentOptions?: { value: string; label: string }[];

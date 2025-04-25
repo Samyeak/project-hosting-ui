@@ -64,7 +64,7 @@ const ClientList: React.FC = () => {
       {
         title: 'Actions',
         key: 'actions',
-        render: (_: any, record: Client) => (
+        render: (_: number, record: Client) => (
           <Space size="small">
             <Button 
               icon={<EditOutlined />} 

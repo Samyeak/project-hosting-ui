@@ -72,7 +72,7 @@ const ProjectList: React.FC = () => {
     {
       title: 'Actions',
       key: 'actions',
-      render: (_: any, record: Project) => (
+      render: (_: number, record: Project) => (
         <Space size="small">
           <Button 
             icon={<EditOutlined />} 
