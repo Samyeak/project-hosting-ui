@@ -11,15 +11,16 @@ import { Deployment, UpdateDeployment } from '@/lib/types';
 
 const { Title } = Typography;
 
-export default function EditDeploymentPage({ params }: { params: { id: string } }) {
+export default function EditDeploymentPage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
   const [deployment, setDeployment] = useState<Deployment | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDeployment = async () => {
+        const {id} = await params;
       try {
         setLoading(true);
-        const data = await getDeployment(parseInt(params.id));
+        const data = await getDeployment(parseInt(id));
         setDeployment(data);
       } catch (error) {
         message.error('Failed to fetch deployment details');
@@ -30,10 +31,11 @@ export default function EditDeploymentPage({ params }: { params: { id: string } 
     };
 
     fetchDeployment();
-  }, [params.id]);
+  }, [params]);
 
   const handleSubmit = async (data: UpdateDeployment) => {
-    await updateDeployment(parseInt(params.id), data);
+        const {id} = await params;
+        await updateDeployment(parseInt(id), data);
   };
 
   return (

@@ -11,15 +11,16 @@ import { Client, UpdateClient } from '@/lib/types';
 
 const { Title } = Typography;
 
-export default function EditClientPage({ params }: { params: { id: string } }) {
+export default function EditClientPage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
   const [client, setClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchClient = async () => {
+      const { id } = await params;
       try {
         setLoading(true);
-        const data = await getClient(parseInt(params.id));
+        const data = await getClient(parseInt(id));
         setClient(data);
       } catch (error) {
         message.error('Failed to fetch client details');
@@ -30,10 +31,11 @@ export default function EditClientPage({ params }: { params: { id: string } }) {
     };
 
     fetchClient();
-  }, [params.id]);
+  }, [params]);
 
   const handleSubmit = async (data: UpdateClient) => {
-    await updateClient(parseInt(params.id), data);
+      const { id } = await params;
+      await updateClient(parseInt(id), data);
   };
 
   return (

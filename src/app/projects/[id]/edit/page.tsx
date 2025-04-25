@@ -11,15 +11,16 @@ import { Project, UpdateProject } from '@/lib/types';
 
 const { Title } = Typography;
 
-export default function EditProjectPage({ params }: Readonly<{ params: { id: string } }>) {
+export default function EditProjectPage({ params }: Readonly<{ params: Promise<{ id: string }> }>) {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
+        const {id} = await params;
         setLoading(true);
-        const data = await getProject(parseInt(params.id));
+        const data = await getProject(parseInt(id));
         setProject(data);
       } catch (error) {
         message.error('Failed to fetch project details');
@@ -30,10 +31,11 @@ export default function EditProjectPage({ params }: Readonly<{ params: { id: str
     };
 
     fetchProject();
-  }, [params.id]);
+  }, [params]);
 
   const handleSubmit = async (data: UpdateProject) => {
-    await updateProject(parseInt(params.id), data);
+        const {id} = await params;
+        await updateProject(parseInt(id), data);
   };
 
   return (
