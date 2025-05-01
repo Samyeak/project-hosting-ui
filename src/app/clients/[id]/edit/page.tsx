@@ -56,3 +56,5 @@ export default function EditClientPage({ params }: Readonly<{ params: Promise<{ 
     </MainLayout>
   );
 }
+
+export const runtime = 'edge';

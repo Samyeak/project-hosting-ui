@@ -56,3 +56,5 @@ export default function EditDeploymentPage({ params }: Readonly<{ params: Promis
     </MainLayout>
   );
 }
+
+export const runtime = 'edge';
