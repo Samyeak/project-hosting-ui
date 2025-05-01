@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pages:build": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
@@ -19,6 +20,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.12",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -27,6 +29,7 @@
     "autoprefixer": "^10.4.14",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
+    "eslint-plugin-next-on-pages": "^1.13.12",
     "postcss": "^8.4.21",
     "tailwindcss": "^4.1.4",
     "typescript": "^5"
