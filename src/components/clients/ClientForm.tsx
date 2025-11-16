@@ -65,11 +65,11 @@ const ClientForm: React.FC<ClientFormProps> = ({
       </Form.Item>
 
       <Form.Item>
-        <div className="flex justify-between">
-          <Button onClick={() => router.push('/clients')}>
+        <div className="flex flex-col-reverse md:flex-row justify-between gap-3">
+          <Button onClick={() => router.push('/clients')} block className="md:w-auto">
             Cancel
           </Button>
-          <Button type="primary" htmlType="submit" loading={submitting || loading}>
+          <Button type="primary" htmlType="submit" loading={submitting || loading} block className="md:w-auto">
             {initialValues ? 'Update' : 'Create'} Client
           </Button>
         </div>

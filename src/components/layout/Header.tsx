@@ -14,9 +14,10 @@ const { Title, Text } = Typography;
 interface HeaderProps {
   collapsed: boolean;
   toggleCollapsed: () => void;
+  isMobile?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ collapsed, toggleCollapsed }) => {
+const Header: React.FC<HeaderProps> = ({ collapsed, toggleCollapsed, isMobile = false }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -31,25 +32,26 @@ const Header: React.FC<HeaderProps> = ({ collapsed, toggleCollapsed }) => {
 
   return (
     <AntHeader
-      className="flex justify-between items-center px-6 animate-slide-in"
+      className="flex justify-between items-center animate-slide-in"
       style={{
         background: 'var(--card-bg)',
         borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-        height: '72px'
+        height: isMobile ? '64px' : '72px',
+        padding: isMobile ? '0 12px' : '0 24px'
       }}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center" style={{ gap: isMobile ? '8px' : '16px' }}>
         <Button
           type="text"
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          icon={isMobile ? <MenuUnfoldOutlined /> : (collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />)}
           onClick={toggleCollapsed}
           className="modern-button"
           style={{
-            width: 42,
-            height: 42,
+            width: isMobile ? 36 : 42,
+            height: isMobile ? 36 : 42,
             borderRadius: '10px',
-            fontSize: '18px',
+            fontSize: isMobile ? '16px' : '18px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -64,14 +66,14 @@ const Header: React.FC<HeaderProps> = ({ collapsed, toggleCollapsed }) => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             fontWeight: 700,
-            fontSize: '20px'
+            fontSize: isMobile ? '16px' : '20px'
           }}
         >
-          Project Hosting Manager
+          {isMobile ? 'PHM' : 'Project Hosting Manager'}
         </Title>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '6px' : '12px' }}>
         {user && (
           <>
             <Button
@@ -79,10 +81,10 @@ const Header: React.FC<HeaderProps> = ({ collapsed, toggleCollapsed }) => {
               icon={theme === 'dark' ? <SunOutlined /> : <MoonOutlined />}
               onClick={toggleTheme}
               style={{
-                width: 42,
-                height: 42,
+                width: isMobile ? 36 : 42,
+                height: isMobile ? 36 : 42,
                 borderRadius: '10px',
-                fontSize: '18px',
+                fontSize: isMobile ? '16px' : '18px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -94,7 +96,7 @@ const Header: React.FC<HeaderProps> = ({ collapsed, toggleCollapsed }) => {
               <div
                 className="cursor-pointer"
                 style={{
-                  padding: '8px 16px',
+                  padding: isMobile ? '6px 10px' : '8px 16px',
                   borderRadius: '12px',
                   transition: 'all 0.3s ease',
                   background: 'transparent'
@@ -106,13 +108,13 @@ const Header: React.FC<HeaderProps> = ({ collapsed, toggleCollapsed }) => {
                   e.currentTarget.style.background = 'transparent';
                 }}
               >
-                <Space size={12}>
+                <Space size={isMobile ? 8 : 12}>
                   <Avatar
                     icon={<UserOutlined />}
                     style={{
                       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      width: 40,
-                      height: 40
+                      width: isMobile ? 32 : 40,
+                      height: isMobile ? 32 : 40
                     }}
                   />
                   <div className="hidden md:block">

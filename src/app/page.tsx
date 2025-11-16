@@ -23,6 +23,18 @@ export default function Home() {
   const [deploymentCount, setDeploymentCount] = useState(0);
   const [uptimeStats, setUptimeStats] = useState<UptimeStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -57,11 +69,11 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className="mb-8 animate-fade-in">
-        <Title level={2} style={{ marginBottom: 8, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: 700 }}>
+      <div className="animate-fade-in" style={{ marginBottom: isMobile ? '16px' : '32px' }}>
+        <Title level={2} style={{ marginBottom: 8, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontWeight: 700, fontSize: isMobile ? '24px' : '32px' }}>
           Dashboard
         </Title>
-        <Paragraph style={{ fontSize: '16px', color: '#64748b' }}>
+        <Paragraph style={{ fontSize: isMobile ? '14px' : '16px', color: '#64748b' }}>
           Welcome back! Here's an overview of your projects and deployments.
         </Paragraph>
       </div>
@@ -72,7 +84,7 @@ export default function Home() {
         </div>
       ) : (
         <>
-          <Row gutter={[24, 24]} className="mt-6">
+          <Row gutter={isMobile ? [16, 16] : [24, 24]} className="mt-6">
             <Col xs={24} sm={8}>
               <Card
                 className="modern-card stat-card animate-fade-in"
@@ -142,15 +154,15 @@ export default function Home() {
 
           {uptimeStats && (
             <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <div className="mt-10 mb-6">
-                <Title level={3} style={{ marginBottom: 8, fontWeight: 600 }}>
+              <div style={{ marginTop: isMobile ? '24px' : '40px', marginBottom: isMobile ? '16px' : '24px' }}>
+                <Title level={3} style={{ marginBottom: 8, fontWeight: 600, fontSize: isMobile ? '20px' : '24px' }}>
                   Uptime Monitoring
                 </Title>
-                <Paragraph style={{ color: '#64748b' }}>
+                <Paragraph style={{ color: '#64748b', fontSize: isMobile ? '13px' : '14px' }}>
                   Real-time monitoring status of your deployments
                 </Paragraph>
               </div>
-              <Row gutter={[24, 24]} className="mt-4">
+              <Row gutter={isMobile ? [16, 16] : [24, 24]} className="mt-4">
                 <Col xs={24} sm={6}>
                   <Card className="modern-card" bordered={false}>
                     <Statistic
