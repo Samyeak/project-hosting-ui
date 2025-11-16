@@ -2,16 +2,19 @@
 // components/layout/Sidebar.tsx
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { 
-  HomeOutlined, 
-  ProjectOutlined, 
-  TeamOutlined, 
-  CloudServerOutlined 
+import {
+  HomeOutlined,
+  ProjectOutlined,
+  TeamOutlined,
+  CloudServerOutlined,
+  SettingOutlined,
+  DashboardOutlined
 } from '@ant-design/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const { Sider } = Layout;
+const { SubMenu } = Menu;
 
 interface SidebarProps {
   collapsed: boolean;
@@ -21,10 +24,17 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   const pathname = usePathname();
 
   const getSelectedKeys = () => {
+    if (pathname?.includes('/settings/uptime')) return ['settings-uptime'];
+    if (pathname?.includes('/settings')) return ['settings'];
     if (pathname?.includes('/projects')) return ['projects'];
     if (pathname?.includes('/clients')) return ['clients'];
     if (pathname?.includes('/deployments')) return ['deployments'];
     return ['dashboard'];
+  };
+
+  const getOpenKeys = () => {
+    if (pathname?.includes('/settings')) return ['settings'];
+    return [];
   };
 
   return (
@@ -44,6 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         theme="light"
         mode="inline"
         selectedKeys={getSelectedKeys()}
+        defaultOpenKeys={getOpenKeys()}
         className="border-r-0"
       >
         <Menu.Item key="dashboard" icon={<HomeOutlined />}>
@@ -58,6 +69,11 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         <Menu.Item key="deployments" icon={<CloudServerOutlined />}>
           <Link href="/deployments">Deployments</Link>
         </Menu.Item>
+        <SubMenu key="settings" icon={<SettingOutlined />} title="Settings">
+          <Menu.Item key="settings-uptime" icon={<DashboardOutlined />}>
+            <Link href="/settings/uptime">Uptime Kuma</Link>
+          </Menu.Item>
+        </SubMenu>
       </Menu>
     </Sider>
   );
