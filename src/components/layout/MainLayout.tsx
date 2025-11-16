@@ -22,11 +22,17 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
   return (
     <ProtectedRoute>
-      <Layout className="min-h-screen">
+      <Layout className="min-h-screen" style={{ background: 'var(--background)' }}>
         <Sidebar collapsed={collapsed} />
         <Layout>
           <Header collapsed={collapsed} toggleCollapsed={toggleCollapsed} />
-          <Content className="m-4 p-4 bg-white rounded">
+          <Content
+            className="m-6 p-6 animate-fade-in"
+            style={{
+              background: 'transparent',
+              minHeight: 'calc(100vh - 120px)'
+            }}
+          >
             {children}
           </Content>
         </Layout>

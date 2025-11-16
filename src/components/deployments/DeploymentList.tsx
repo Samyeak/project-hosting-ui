@@ -11,8 +11,9 @@ import {
   Typography,
   Tag,
   Tooltip,
+  Card,
 } from "antd";
-import { EditOutlined, DeleteOutlined, PlusOutlined, SyncOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, PlusOutlined, SyncOutlined, CloudServerOutlined, LinkOutlined } from "@ant-design/icons";
 import { DeploymentWithUptime, Project, Client, DeploymentFilter } from "@/lib/types";
 import {
   getDeploymentsWithUptime,
@@ -28,7 +29,7 @@ import SearchBar from "../ui/SearchBar";
 import UptimeStatusBadge from "../uptime/UptimeStatusBadge";
 import UptimePercentageBar from "../uptime/UptimePercentageBar";
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
 const DeploymentList: React.FC = () => {
   const [deployments, setDeployments] = useState<DeploymentWithUptime[]>([]);
@@ -102,62 +103,92 @@ const DeploymentList: React.FC = () => {
 
   const columns = [
     {
-      title: "Project",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Project</span>,
       dataIndex: "projectName",
       key: "projectName",
+      render: (text: string) => (
+        <span style={{ fontWeight: 600, color: '#1e293b', fontSize: '14px' }}>
+          {text}
+        </span>
+      )
     },
     {
-      title: "Client",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Client</span>,
       dataIndex: "clientName",
       key: "clientName",
+      render: (text: string) => (
+        <span style={{ color: '#64748b', fontSize: '13px' }}>
+          {text}
+        </span>
+      )
     },
     {
-      title: "Type",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Type</span>,
       dataIndex: "type",
       key: "type",
-      render: (text: string) => <Tag>{text}</Tag>,
+      render: (text: string) => (
+        <Tag
+          style={{
+            borderRadius: '8px',
+            fontSize: '12px',
+            padding: '4px 12px',
+            border: 'none',
+            background: 'rgba(79, 70, 229, 0.1)',
+            color: '#4f46e5'
+          }}
+        >
+          {text}
+        </Tag>
+      ),
     },
     {
-      title: "Environment",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Environment</span>,
       dataIndex: "environment",
       key: "environment",
       render: (text: string) => {
-        let color = "default";
-        switch (text.toLowerCase()) {
-          case "production":
-            color = "red";
-            break;
-          case "staging":
-            color = "orange";
-            break;
-          case "uat":
-            color = "gold";
-            break;
-          case "testing":
-            color = "blue";
-            break;
-          case "development":
-            color = "green";
-            break;
-          default:
-            color = "default";
-        }
-        return <Tag color={color}>{text}</Tag>;
+        const envConfig: Record<string, { gradient: string; color: string }> = {
+          production: { gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', color: '#ef4444' },
+          staging: { gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: '#f59e0b' },
+          uat: { gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', color: '#f59e0b' },
+          testing: { gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)', color: '#06b6d4' },
+          development: { gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#10b981' },
+        };
+        const config = envConfig[text.toLowerCase()] || { gradient: 'rgba(148, 163, 184, 0.1)', color: '#64748b' };
+
+        return (
+          <Tag
+            style={{
+              borderRadius: '8px',
+              fontSize: '12px',
+              padding: '4px 12px',
+              border: 'none',
+              background: config.gradient,
+              color: 'white',
+              fontWeight: 600
+            }}
+          >
+            {text}
+          </Tag>
+        );
       },
     },
     {
-      title: "Hosting Platform",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Hosting Platform</span>,
       dataIndex: "hostingPlatform",
       key: "hostingPlatform",
       ellipsis: true,
+      render: (text: string) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <CloudServerOutlined style={{ color: '#10b981' }} />
+          <span style={{ color: '#64748b', fontSize: '13px' }}>{text}</span>
+        </div>
+      )
     },
     {
-      title: "Domain",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Domain</span>,
       dataIndex: "domainUrl",
       key: "domainUrl",
       width: "30%",
-
-      // ellipsis: true,
       render: (text: string) => {
         if (text) {
           return text.split(",").map((item) => {
@@ -167,24 +198,32 @@ const DeploymentList: React.FC = () => {
                 key={item}
                 target="_blank"
                 rel="noopener noreferrer"
+                style={{
+                  color: '#4f46e5',
+                  fontSize: '13px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  marginBottom: '4px'
+                }}
               >
-                {item}
+                <LinkOutlined /> {item}
               </a>
             );
           });
         } else {
-          return "-";
+          return <span style={{ color: '#94a3b8' }}>-</span>;
         }
       },
     },
     {
-      title: "Status",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Status</span>,
       dataIndex: "status",
       key: "status",
       render: (text: string) => <StatusBadge status={text} />,
     },
     {
-      title: "Uptime",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Uptime</span>,
       key: "uptime",
       width: 150,
       render: (_: unknown, record: DeploymentWithUptime) => (
@@ -192,7 +231,7 @@ const DeploymentList: React.FC = () => {
       ),
     },
     {
-      title: "Uptime %",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Uptime %</span>,
       key: "uptimePercentage",
       width: 150,
       render: (_: unknown, record: DeploymentWithUptime) => {
@@ -205,24 +244,37 @@ const DeploymentList: React.FC = () => {
             />
           );
         }
-        return <span style={{ color: '#999' }}>-</span>;
+        return <span style={{ color: '#94a3b8' }}>-</span>;
       },
     },
     {
-      title: "Actions",
+      title: <span style={{ fontWeight: 600, fontSize: '14px' }}>Actions</span>,
       key: "actions",
+      width: 140,
       render: (_: number, record: DeploymentWithUptime) => (
         <Space size="small">
           <Button
+            type="text"
             icon={<EditOutlined />}
             onClick={() => router.push(`/deployments/${record.id}/edit`)}
+            style={{
+              borderRadius: '8px',
+              color: '#10b981',
+              transition: 'all 0.3s ease'
+            }}
           />
           {record.domainUrl && (
             <Tooltip title="Sync with Uptime Kuma">
               <Button
+                type="text"
                 icon={<SyncOutlined />}
                 onClick={() => handleSyncMonitor(record.id)}
                 loading={syncing === record.id}
+                style={{
+                  borderRadius: '8px',
+                  color: '#06b6d4',
+                  transition: 'all 0.3s ease'
+                }}
               />
             </Tooltip>
           )}
@@ -233,7 +285,15 @@ const DeploymentList: React.FC = () => {
             okText="Yes"
             cancelText="No"
           >
-            <Button danger icon={<DeleteOutlined />} />
+            <Button
+              type="text"
+              danger
+              icon={<DeleteOutlined />}
+              style={{
+                borderRadius: '8px',
+                transition: 'all 0.3s ease'
+              }}
+            />
           </Popconfirm>
         </Space>
       ),
@@ -254,32 +314,81 @@ const DeploymentList: React.FC = () => {
   ];
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <Title level={3}>Deployments</Title>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => router.push("/deployments/add")}
-        >
-          Add Deployment
-        </Button>
+    <div className="animate-fade-in">
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-3">
+          <Title
+            level={2}
+            style={{
+              margin: 0,
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              fontWeight: 700
+            }}
+          >
+            Deployments
+          </Title>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => router.push("/deployments/add")}
+            size="large"
+            style={{
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              border: 'none',
+              borderRadius: '10px',
+              height: '44px',
+              fontSize: '14px',
+              fontWeight: 600,
+              boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            Add Deployment
+          </Button>
+        </div>
+        <Paragraph style={{ fontSize: '15px', color: '#64748b', margin: 0 }}>
+          Monitor and manage your deployment environments
+        </Paragraph>
       </div>
 
-      <SearchBar
-        onSearch={handleSearch}
-        projectOptions={projectOptions}
-        clientOptions={clientOptions}
-        environmentOptions={environmentOptions}
-        loading={searching}
-      />
+      <Card
+        className="modern-card"
+        bordered={false}
+        style={{ marginBottom: '24px' }}
+      >
+        <SearchBar
+          onSearch={handleSearch}
+          projectOptions={projectOptions}
+          clientOptions={clientOptions}
+          environmentOptions={environmentOptions}
+          loading={searching}
+        />
+      </Card>
 
-      <Table
-        columns={columns}
-        dataSource={deployments}
-        rowKey="id"
-        loading={loading}
-      />
+      <Card
+        className="modern-card"
+        bordered={false}
+        style={{ overflow: 'hidden' }}
+      >
+        <Table
+          columns={columns}
+          dataSource={deployments}
+          rowKey="id"
+          loading={loading}
+          pagination={{
+            pageSize: 10,
+            showTotal: (total) => `Total ${total} deployments`,
+            style: { marginTop: '20px' }
+          }}
+          style={{
+            background: 'transparent'
+          }}
+        />
+      </Card>
     </div>
   );
 };
