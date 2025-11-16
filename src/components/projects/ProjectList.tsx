@@ -13,7 +13,19 @@ const { Title, Paragraph } = Typography;
 const ProjectList: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     fetchProjects();
@@ -147,8 +159,17 @@ const ProjectList: React.FC = () => {
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-3">
+      <div style={{ marginBottom: isMobile ? '16px' : '32px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'space-between',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            gap: isMobile ? '12px' : '0',
+            marginBottom: '12px'
+          }}
+        >
           <Title
             level={2}
             style={{
@@ -156,7 +177,8 @@ const ProjectList: React.FC = () => {
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              fontWeight: 700
+              fontWeight: 700,
+              fontSize: isMobile ? '24px' : '32px'
             }}
           >
             Projects
@@ -165,24 +187,25 @@ const ProjectList: React.FC = () => {
             type="primary"
             icon={<PlusOutlined />}
             onClick={() => router.push('/projects/add')}
-            size="large"
+            size={isMobile ? 'middle' : 'large'}
             style={{
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               border: 'none',
               borderRadius: '10px',
-              height: '44px',
+              height: isMobile ? '36px' : '44px',
               fontSize: '14px',
               fontWeight: 600,
               boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              width: isMobile ? '100%' : 'auto'
             }}
           >
             Add Project
           </Button>
         </div>
-        <Paragraph style={{ fontSize: '15px', color: '#64748b', margin: 0 }}>
+        <Paragraph style={{ fontSize: isMobile ? '13px' : '15px', color: '#64748b', margin: 0 }}>
           Manage your project repositories and configurations
         </Paragraph>
       </div>
@@ -197,10 +220,12 @@ const ProjectList: React.FC = () => {
           dataSource={projects}
           rowKey="id"
           loading={loading}
+          scroll={isMobile ? { x: 800 } : undefined}
           pagination={{
             pageSize: 10,
             showTotal: (total) => `Total ${total} projects`,
-            style: { marginTop: '20px' }
+            style: { marginTop: '20px' },
+            size: isMobile ? 'small' : 'default'
           }}
           style={{
             background: 'transparent'

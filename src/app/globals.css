@@ -236,3 +236,96 @@ body {
 .ant-menu-submenu-selected > .ant-menu-submenu-title {
   color: #667eea !important;
 }
+
+/* Mobile Responsive Utilities */
+@media (max-width: 768px) {
+  /* Adjust table for mobile */
+  .ant-table-wrapper .ant-table {
+    font-size: 13px;
+  }
+
+  .ant-table-wrapper .ant-table-thead > tr > th {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .ant-table-wrapper .ant-table-tbody > tr > td {
+    padding: 8px;
+  }
+
+  /* Adjust card padding for mobile */
+  .ant-card-body {
+    padding: 16px;
+  }
+
+  /* Adjust form labels for mobile */
+  .ant-form-item-label > label {
+    font-size: 13px;
+  }
+
+  /* Adjust input sizes for mobile */
+  .ant-input,
+  .ant-input-number,
+  .ant-picker,
+  .ant-select-selector {
+    font-size: 14px;
+  }
+
+  /* Reduce stat card font sizes on mobile */
+  .stat-card .ant-statistic-content-value {
+    font-size: 24px !important;
+  }
+
+  .stat-card .ant-statistic-title {
+    font-size: 12px !important;
+  }
+
+  /* Mobile-friendly buttons */
+  .ant-btn {
+    font-size: 14px;
+    padding: 4px 12px;
+  }
+
+  .ant-btn-lg {
+    font-size: 14px;
+    padding: 6px 15px;
+  }
+
+  /* Adjust modal for mobile */
+  .ant-modal {
+    max-width: calc(100vw - 32px);
+    margin: 16px auto;
+  }
+
+  /* Adjust drawer for mobile */
+  .ant-drawer-body {
+    padding: 16px;
+  }
+
+  /* Reduce animation complexity on mobile for better performance */
+  .modern-card:hover {
+    transform: none;
+  }
+
+  .modern-button::before {
+    display: none;
+  }
+}
+
+/* Tablet Responsive */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .ant-table-wrapper .ant-table {
+    font-size: 14px;
+  }
+}
+
+/* Touch-friendly clickable areas */
+@media (hover: none) and (pointer: coarse) {
+  .ant-btn,
+  .ant-menu-item,
+  .ant-dropdown-menu-item {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}

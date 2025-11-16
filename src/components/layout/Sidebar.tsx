@@ -18,9 +18,10 @@ const { SubMenu } = Menu;
 
 interface SidebarProps {
   collapsed: boolean;
+  onMenuClick?: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, onMenuClick }) => {
   const pathname = usePathname();
 
   const getSelectedKeys = () => {
@@ -87,6 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
         mode="inline"
         selectedKeys={getSelectedKeys()}
         defaultOpenKeys={getOpenKeys()}
+        onClick={onMenuClick}
         style={{
           borderRight: 0,
           padding: '16px 12px',

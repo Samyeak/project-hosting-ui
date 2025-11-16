@@ -38,7 +38,19 @@ const DeploymentList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
   const [syncing, setSyncing] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     fetchInitialData();
@@ -315,8 +327,17 @@ const DeploymentList: React.FC = () => {
 
   return (
     <div className="animate-fade-in">
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-3">
+      <div style={{ marginBottom: isMobile ? '16px' : '32px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'space-between',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            gap: isMobile ? '12px' : '0',
+            marginBottom: '12px'
+          }}
+        >
           <Title
             level={2}
             style={{
@@ -324,7 +345,8 @@ const DeploymentList: React.FC = () => {
               background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              fontWeight: 700
+              fontWeight: 700,
+              fontSize: isMobile ? '24px' : '32px'
             }}
           >
             Deployments
@@ -333,24 +355,25 @@ const DeploymentList: React.FC = () => {
             type="primary"
             icon={<PlusOutlined />}
             onClick={() => router.push("/deployments/add")}
-            size="large"
+            size={isMobile ? 'middle' : 'large'}
             style={{
               background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
               border: 'none',
               borderRadius: '10px',
-              height: '44px',
+              height: isMobile ? '36px' : '44px',
               fontSize: '14px',
               fontWeight: 600,
               boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              width: isMobile ? '100%' : 'auto'
             }}
           >
             Add Deployment
           </Button>
         </div>
-        <Paragraph style={{ fontSize: '15px', color: '#64748b', margin: 0 }}>
+        <Paragraph style={{ fontSize: isMobile ? '13px' : '15px', color: '#64748b', margin: 0 }}>
           Monitor and manage your deployment environments
         </Paragraph>
       </div>
@@ -358,7 +381,7 @@ const DeploymentList: React.FC = () => {
       <Card
         className="modern-card"
         bordered={false}
-        style={{ marginBottom: '24px' }}
+        style={{ marginBottom: isMobile ? '16px' : '24px' }}
       >
         <SearchBar
           onSearch={handleSearch}
@@ -379,10 +402,12 @@ const DeploymentList: React.FC = () => {
           dataSource={deployments}
           rowKey="id"
           loading={loading}
+          scroll={isMobile ? { x: 1200 } : undefined}
           pagination={{
             pageSize: 10,
             showTotal: (total) => `Total ${total} deployments`,
-            style: { marginTop: '20px' }
+            style: { marginTop: '20px' },
+            size: isMobile ? 'small' : 'default'
           }}
           style={{
             background: 'transparent'
