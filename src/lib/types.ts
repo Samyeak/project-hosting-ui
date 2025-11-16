@@ -85,4 +85,75 @@ export interface Project {
     environment?: string;
     clientName?: string;
   }
-  
+
+  // Authentication types
+  export interface User {
+    id: number;
+    email: string;
+    username: string;
+    role?: string;
+    createdAt?: string;
+  }
+
+  export interface LoginRequest {
+    email: string;
+    password: string;
+  }
+
+  export interface RegisterRequest {
+    email: string;
+    username: string;
+    password: string;
+  }
+
+  export interface AuthResponse {
+    user: User;
+    token: string;
+    refreshToken?: string;
+  }
+
+  export interface RefreshTokenRequest {
+    refreshToken: string;
+  }
+
+  // Uptime Kuma types
+  export interface UptimeMonitor {
+    id: number;
+    name: string;
+    url: string;
+    type: string;
+    interval: number;
+    active: boolean;
+    uptimePercentage?: number;
+    avgResponseTime?: number;
+    status?: 'up' | 'down' | 'pending' | 'maintenance';
+    lastCheck?: string;
+  }
+
+  export interface UptimeStats {
+    totalMonitors: number;
+    upMonitors: number;
+    downMonitors: number;
+    pausedMonitors: number;
+    avgUptime: number;
+  }
+
+  export interface CreateUptimeMonitor {
+    name: string;
+    url: string;
+    type?: string;
+    interval?: number;
+    deploymentId?: number;
+  }
+
+  export interface UptimeKumaSettings {
+    id?: number;
+    baseUrl: string;
+    apiKey?: string;
+    enabled: boolean;
+  }
+
+  export interface DeploymentWithUptime extends Deployment {
+    monitor?: UptimeMonitor;
+    monitorId?: number;
+  }

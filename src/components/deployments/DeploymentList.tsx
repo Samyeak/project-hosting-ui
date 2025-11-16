@@ -10,28 +10,33 @@ import {
   message,
   Typography,
   Tag,
+  Tooltip,
 } from "antd";
-import { EditOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Deployment, Project, Client, DeploymentFilter } from "@/lib/types";
+import { EditOutlined, DeleteOutlined, PlusOutlined, SyncOutlined } from "@ant-design/icons";
+import { DeploymentWithUptime, Project, Client, DeploymentFilter } from "@/lib/types";
 import {
-  getDeployments,
+  getDeploymentsWithUptime,
   deleteDeployment,
   getProjects,
   getClients,
   getFilteredDeployments,
+  syncUptimeMonitor,
 } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import StatusBadge from "../ui/StatusBadge";
 import SearchBar from "../ui/SearchBar";
+import UptimeStatusBadge from "../uptime/UptimeStatusBadge";
+import UptimePercentageBar from "../uptime/UptimePercentageBar";
 
 const { Title } = Typography;
 
 const DeploymentList: React.FC = () => {
-  const [deployments, setDeployments] = useState<Deployment[]>([]);
+  const [deployments, setDeployments] = useState<DeploymentWithUptime[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(false);
   const [searching, setSearching] = useState(false);
+  const [syncing, setSyncing] = useState<number | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -42,7 +47,7 @@ const DeploymentList: React.FC = () => {
     try {
       setLoading(true);
       const [deploymentsData, projectsData, clientsData] = await Promise.all([
-        getDeployments(),
+        getDeploymentsWithUptime(),
         getProjects(),
         getClients(),
       ]);
@@ -54,6 +59,20 @@ const DeploymentList: React.FC = () => {
       console.error(error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSyncMonitor = async (deploymentId: number) => {
+    try {
+      setSyncing(deploymentId);
+      await syncUptimeMonitor(deploymentId);
+      message.success("Monitor synced successfully");
+      fetchInitialData();
+    } catch (error) {
+      message.error("Failed to sync monitor");
+      console.error(error);
+    } finally {
+      setSyncing(null);
     }
   };
 
@@ -165,14 +184,48 @@ const DeploymentList: React.FC = () => {
       render: (text: string) => <StatusBadge status={text} />,
     },
     {
+      title: "Uptime",
+      key: "uptime",
+      width: 150,
+      render: (_: unknown, record: DeploymentWithUptime) => (
+        <UptimeStatusBadge monitor={record.monitor} showDetails />
+      ),
+    },
+    {
+      title: "Uptime %",
+      key: "uptimePercentage",
+      width: 150,
+      render: (_: unknown, record: DeploymentWithUptime) => {
+        if (record.monitor?.uptimePercentage !== undefined) {
+          return (
+            <UptimePercentageBar
+              percentage={record.monitor.uptimePercentage}
+              size="small"
+              showInfo={false}
+            />
+          );
+        }
+        return <span style={{ color: '#999' }}>-</span>;
+      },
+    },
+    {
       title: "Actions",
       key: "actions",
-      render: (_: number, record: Deployment) => (
+      render: (_: number, record: DeploymentWithUptime) => (
         <Space size="small">
           <Button
             icon={<EditOutlined />}
             onClick={() => router.push(`/deployments/${record.id}/edit`)}
           />
+          {record.domainUrl && (
+            <Tooltip title="Sync with Uptime Kuma">
+              <Button
+                icon={<SyncOutlined />}
+                onClick={() => handleSyncMonitor(record.id)}
+                loading={syncing === record.id}
+              />
+            </Tooltip>
+          )}
           <Popconfirm
             title="Delete this deployment?"
             description="This action cannot be undone."
