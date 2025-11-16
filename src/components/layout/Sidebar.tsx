@@ -38,43 +38,130 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed }) => {
   };
 
   return (
-    <Sider 
-      trigger={null} 
-      collapsible 
-      collapsed={collapsed} 
-      width={200} 
-      className="bg-white border-r border-gray-200"
+    <Sider
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      width={240}
+      style={{
+        background: 'var(--card-bg)',
+        borderRight: '1px solid rgba(0, 0, 0, 0.06)',
+        boxShadow: '2px 0 8px rgba(0, 0, 0, 0.03)'
+      }}
     >
-      <div className="h-16 flex items-center justify-center border-b border-gray-200">
-        <h1 className="text-xl font-bold text-blue-600">
-          {collapsed ? 'PHM' : 'PHM'}
-        </h1>
+      <div
+        className="flex items-center justify-center"
+        style={{
+          height: '72px',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+          padding: '0 24px'
+        }}
+      >
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            padding: collapsed ? '8px 12px' : '8px 20px',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          <h1
+            className="text-xl font-bold"
+            style={{
+              margin: 0,
+              color: 'white',
+              fontSize: collapsed ? '16px' : '20px',
+              letterSpacing: '0.5px'
+            }}
+          >
+            {collapsed ? 'PHM' : 'PHM'}
+          </h1>
+        </div>
       </div>
       <Menu
         theme="light"
         mode="inline"
         selectedKeys={getSelectedKeys()}
         defaultOpenKeys={getOpenKeys()}
-        className="border-r-0"
-      >
-        <Menu.Item key="dashboard" icon={<HomeOutlined />}>
-          <Link href="/">Dashboard</Link>
-        </Menu.Item>
-        <Menu.Item key="projects" icon={<ProjectOutlined />}>
-          <Link href="/projects">Projects</Link>
-        </Menu.Item>
-        <Menu.Item key="clients" icon={<TeamOutlined />}>
-          <Link href="/clients">Clients</Link>
-        </Menu.Item>
-        <Menu.Item key="deployments" icon={<CloudServerOutlined />}>
-          <Link href="/deployments">Deployments</Link>
-        </Menu.Item>
-        <SubMenu key="settings" icon={<SettingOutlined />} title="Settings">
-          <Menu.Item key="settings-uptime" icon={<DashboardOutlined />}>
-            <Link href="/settings/uptime">Uptime Kuma</Link>
-          </Menu.Item>
-        </SubMenu>
-      </Menu>
+        style={{
+          borderRight: 0,
+          padding: '16px 12px',
+          background: 'transparent'
+        }}
+        items={[
+          {
+            key: 'dashboard',
+            icon: <HomeOutlined style={{ fontSize: '18px' }} />,
+            label: <Link href="/" style={{ fontSize: '14px', fontWeight: 500 }}>Dashboard</Link>,
+            style: {
+              margin: '4px 0',
+              borderRadius: '10px',
+              height: '48px',
+              display: 'flex',
+              alignItems: 'center'
+            }
+          },
+          {
+            key: 'projects',
+            icon: <ProjectOutlined style={{ fontSize: '18px' }} />,
+            label: <Link href="/projects" style={{ fontSize: '14px', fontWeight: 500 }}>Projects</Link>,
+            style: {
+              margin: '4px 0',
+              borderRadius: '10px',
+              height: '48px',
+              display: 'flex',
+              alignItems: 'center'
+            }
+          },
+          {
+            key: 'clients',
+            icon: <TeamOutlined style={{ fontSize: '18px' }} />,
+            label: <Link href="/clients" style={{ fontSize: '14px', fontWeight: 500 }}>Clients</Link>,
+            style: {
+              margin: '4px 0',
+              borderRadius: '10px',
+              height: '48px',
+              display: 'flex',
+              alignItems: 'center'
+            }
+          },
+          {
+            key: 'deployments',
+            icon: <CloudServerOutlined style={{ fontSize: '18px' }} />,
+            label: <Link href="/deployments" style={{ fontSize: '14px', fontWeight: 500 }}>Deployments</Link>,
+            style: {
+              margin: '4px 0',
+              borderRadius: '10px',
+              height: '48px',
+              display: 'flex',
+              alignItems: 'center'
+            }
+          },
+          {
+            key: 'settings',
+            icon: <SettingOutlined style={{ fontSize: '18px' }} />,
+            label: 'Settings',
+            style: {
+              margin: '4px 0',
+              borderRadius: '10px',
+              height: '48px',
+              display: 'flex',
+              alignItems: 'center'
+            },
+            children: [
+              {
+                key: 'settings-uptime',
+                icon: <DashboardOutlined />,
+                label: <Link href="/settings/uptime">Uptime Kuma</Link>
+              }
+            ]
+          }
+        ]}
+      />
     </Sider>
   );
 };
