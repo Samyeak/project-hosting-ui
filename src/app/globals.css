@@ -32,6 +32,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark Mode */
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card-bg: #1e293b;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0f172a;
